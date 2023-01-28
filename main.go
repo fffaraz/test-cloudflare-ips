@@ -15,6 +15,7 @@ func main() {
 
 	for ip := start; ip.To4() != nil && !ip.Equal(end); inc(ip) {
 		testIP(ip)
+		time.Sleep(1 * time.Second)
 	}
 }
 
@@ -38,7 +39,10 @@ func testIP(ip net.IP) {
 			return net.Dial(network, ip.String()+":443")
 		},
 	}
-	client := &http.Client{Transport: transport}
+	client := &http.Client{
+		Timeout:   2 * time.Second,
+		Transport: transport,
+	}
 
 	startTime := time.Now()
 
